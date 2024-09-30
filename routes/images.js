@@ -3,9 +3,23 @@ const express = require("express");
 const multer = require("multer");
 const Image = require("../models/Image");
 const Annotation = require("../models/Annotation");
-const authenticateToken = require("../config/authMiddleware"); // Import the auth middleware
+const authenticateToken = require("../config/authMiddleware");
+//const { classifyImage } = require("../utils/imageClassifier"); // Import the classifier
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+
+// Set up storage for multer with file extension handling
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads"); // Directory to save the images
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const ext = path.extname(file.originalname); // Get the original file extension
+    cb(null, `${uniqueName}${ext}`); // Save with unique name + extension
+  },
+});
+
+const upload = multer({ storage });
 
 // Upload Image
 router.post(
@@ -13,9 +27,14 @@ router.post(
   authenticateToken,
   upload.single("image"),
   async (req, res) => {
-    const image = new Image({ userId: req.user.id, filePath: req.file.path }); // Associate image with the user
+    const image = new Image({ userId: req.user.id, filePath: req.file.path });
     try {
       await image.save();
+
+      // Classify the image
+      //const className = await classifyImage(req.file.path);
+
+      //res.status(201).json({ image, className }); // Return classification result
       res.status(201).json(image);
     } catch (error) {
       res.status(400).json({ message: "Error uploading image" });
@@ -30,7 +49,7 @@ router.post("/annotations", authenticateToken, async (req, res) => {
     imageId,
     userId: req.user.id,
     annotations,
-  }); // Associate annotation with the user
+  });
 
   try {
     await annotation.save();
@@ -46,7 +65,7 @@ router.get("/annotations/:imageId", authenticateToken, async (req, res) => {
     const annotations = await Annotation.find({
       imageId: req.params.imageId,
       userId: req.user.id,
-    }); // Fetch annotations for the authenticated user
+    });
     res.json(annotations);
   } catch (error) {
     res.status(400).json({ message: "Error fetching annotations" });
@@ -56,7 +75,7 @@ router.get("/annotations/:imageId", authenticateToken, async (req, res) => {
 // Get Images by User ID
 router.get("/", authenticateToken, async (req, res) => {
   try {
-    const images = await Image.find({ userId: req.user.id }); // Fetch images for the authenticated user
+    const images = await Image.find({ userId: req.user.id });
     res.json(images);
   } catch (error) {
     res.status(400).json({ message: "Error fetching images" });
