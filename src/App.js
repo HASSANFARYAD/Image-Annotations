@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import ImageUpload from "./components/ImageUpload";
 import ImageList from "./components/ImageList";
+import Gallery from "./components/AnnotationComponent";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/" element={<ImageList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/gallery" element={<Gallery />} />
         </Routes>
         <ImageUpload onUpload={() => {}} />
       </div>

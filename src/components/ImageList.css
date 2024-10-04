@@ -1,0 +1,311 @@
+/* src/components/ImageList.css */
+
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.image-box {
+  position: relative;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.image-box:hover {
+  transform: scale(1.05);
+}
+
+.gallery-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.image-details {
+  margin-top: 10px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.image-details h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.image-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.image-details li {
+  font-size: 0.9rem;
+  padding: 5px 0;
+  color: #555;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.image-details li span {
+  font-weight: bold;
+}
+
+.confidence-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #ddd;
+  border-radius: 3px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.3s ease;
+}
+
+/* Style for the badge container */
+.badge-container {
+  display: flex;
+  flex-direction: column; /* Stack badges vertically */
+  gap: 5px; /* Space between badges */
+}
+
+/* Badge styles */
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: white;
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 1px;
+}
+
+/* Neutral Tones */
+.badge-1 {
+  background-color: #f2f2f2;
+  color: #333333;
+}
+.badge-2 {
+  background-color: #333333;
+  color: #f2f2f2;
+}
+.badge-3 {
+  background-color: #f5f5dc;
+  color: #333333;
+}
+.badge-4 {
+  background-color: #d3b187;
+  color: #ffffff;
+}
+.badge-5 {
+  background-color: #fff8e1;
+  color: #333333;
+}
+
+/* Pastel Hues */
+.badge-6 {
+  background-color: #b5e0c3;
+  color: #333333;
+}
+.badge-7 {
+  background-color: #e8cfc8;
+  color: #333333;
+}
+.badge-8 {
+  background-color: #ffdab9;
+  color: #333333;
+}
+.badge-9 {
+  background-color: #87ceeb;
+  color: #333333;
+}
+.badge-10 {
+  background-color: #ffffb0;
+  color: #333333;
+}
+
+/* Vibrant Colors */
+.badge-11 {
+  background-color: #c71585;
+  color: #ffffff;
+}
+.badge-12 {
+  background-color: #008000;
+  color: #ffffff;
+}
+.badge-13 {
+  background-color: #0000cd;
+  color: #ffffff;
+}
+.badge-14 {
+  background-color: #9966cc;
+  color: #ffffff;
+}
+.badge-15 {
+  background-color: #e3a817;
+  color: #ffffff;
+}
+
+/* Complementary Pairs */
+.badge-16 {
+  background-color: #ff0000;
+  color: #ffffff;
+}
+.badge-17 {
+  background-color: #008000;
+  color: #ffffff;
+}
+.badge-18 {
+  background-color: #0000ff;
+  color: #ffffff;
+}
+.badge-19 {
+  background-color: #ffa500;
+  color: #ffffff;
+}
+.badge-20 {
+  background-color: #ffff00;
+  color: #333333;
+}
+.badge-21 {
+  background-color: #800080;
+  color: #ffffff;
+}
+.badge-22 {
+  background-color: #ffb6c1;
+  color: #333333;
+}
+.badge-23 {
+  background-color: #008080;
+  color: #ffffff;
+}
+.badge-24 {
+  background-color: #a52a2a;
+  color: #ffffff;
+}
+.badge-25 {
+  background-color: #40e0d0;
+  color: #333333;
+}
+
+/* Triadic Color Schemes */
+.badge-26 {
+  background-color: #ff0000;
+  color: #ffffff;
+}
+.badge-27 {
+  background-color: #008000;
+  color: #ffffff;
+}
+.badge-28 {
+  background-color: #0000ff;
+  color: #ffffff;
+}
+
+/* Analogous Color Schemes */
+.badge-29 {
+  background-color: #0000ff;
+  color: #ffffff;
+}
+.badge-30 {
+  background-color: #008080;
+  color: #ffffff;
+}
+.badge-31 {
+  background-color: #008000;
+  color: #ffffff;
+}
+
+/* Monochromatic Color Schemes */
+.badge-32 {
+  background-color: #ff0000;
+  color: #ffffff;
+}
+.badge-33 {
+  background-color: #800000;
+  color: #ffffff;
+}
+.badge-34 {
+  background-color: #400000;
+  color: #ffffff;
+}
+
+/* Gradients */
+.badge-35 {
+  background-image: linear-gradient(to right, #0000ff, #800080);
+  color: #ffffff;
+}
+.badge-36 {
+  background-image: linear-gradient(to right, #ffa500, #ffff00);
+  color: #333333;
+}
+.badge-37 {
+  background-image: linear-gradient(to right, #008000, #008080);
+  color: #ffffff;
+}
+
+/* Hexadecimal Color Codes */
+.badge-38 {
+  background-color: #ffd700;
+  color: #333333;
+}
+.badge-39 {
+  background-color: #ff1493;
+  color: #ffffff;
+}
+.badge-40 {
+  background-color: #00ffff;
+  color: #333333;
+}
+.badge-41 {
+  background-color: #ffff00;
+  color: #333333;
+}
+.badge-42 {
+  background-color: #000080;
+  color: #ffffff;
+}
+.badge-43 {
+  background-color: #800000;
+  color: #ffffff;
+}
+
+/* Color Names */
+.badge-44 {
+  background-color: crimson;
+  color: #ffffff;
+}
+.badge-45 {
+  background-color: indigo;
+  color: #ffffff;
+}
+.badge-46 {
+  background-color: olive;
+  color: #ffffff;
+}
+.badge-47 {
+  background-color: sienna;
+  color: #ffffff;
+}
+.badge-48 {
+  background-color: magenta;
+  color: #ffffff;
+}
+.badge-49 {
+  background-color: limegreen;
+  color: #ffffff;
+}
+.badge-50 {
+  background-color: lavender;
+  color: #333333;
+}
