@@ -1,34 +1,53 @@
-// utils/imageClassifier.js
-const tf = require("@tensorflow/tfjs-node");
-const fs = require("fs");
-const { getLabel } = require("./classLabels");
+// utils/classifyImage.js
 
-// Load the pre-trained model (e.g., MobileNet)
-let model;
-const loadModel = async () => {
-  model = await tf.loadGraphModel(
-    "https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2/feature_vector/4/default/1"
-  );
+const { NeuralNetwork } = require("brain.js");
+const fs = require("fs");
+const sharp = require("sharp");
+const preprocessImage = require("./preprocessImage");
+
+const trainModel = (trainingData) => {
+  // Train the neural network with training data (features and labels)
+  net.train(trainingData, {
+    iterations: 20000, // Increase if needed
+    errorThresh: 0.005,
+    log: true,
+    logPeriod: 100,
+  });
 };
 
-loadModel();
+const classifyImage = async (filePath) => {
+  try {
+    console.log(`Classifying image: ${filePath}`); // Log the file path to check if it's correct
 
-// Function to classify an image
-const classifyImage = async (imagePath) => {
-  const imageBuffer = fs.readFileSync(imagePath);
-  const decodedImage = tf.node.decodeImage(imageBuffer);
+    // Read the image using Sharp
+    const imageBuffer = await sharp(filePath)
+      .resize(100, 100) // Resize image (depends on your model's input size)
+      .toBuffer();
 
-  // Resize and normalize the image
-  const resizedImage = tf.image.resizeBilinear(decodedImage, [224, 224]); // Adjust size as needed
-  const normalizedImage = resizedImage.div(255.0).expandDims(0); // Normalize and add batch dimension
+    console.log("Image processed successfully"); // Log if the image was processed
 
-  // Classify the image
-  const predictions = await model.predict(normalizedImage).data();
+    // Convert image buffer to normalized pixel values (0-1)
+    const normalizedPixels = Array.from(imageBuffer).map(
+      (pixel) => pixel / 255
+    );
 
-  // Get the top class prediction
-  const topClassIndex = predictions.indexOf(Math.max(...predictions));
-  const className = getLabel(topClassIndex);
-  return className; // You might want to map this to actual labels
+    console.log("Image pixels normalized:", normalizedPixels.slice(0, 20)); // Log first 20 normalized values
+
+    // Dummy Brain.js Neural Network (This needs to be replaced with actual trained model)
+    const net = new NeuralNetwork();
+
+    // Load a trained model or train a new one (this is a placeholder model)
+    net.train([{ input: normalizedPixels, output: { cat: 1 } }]);
+
+    // Use the model to classify
+    const result = net.run(normalizedPixels);
+    console.log("Classification result:", result); // Log the classification result
+
+    return result;
+  } catch (error) {
+    console.error("Error in classifyImage:", error.message); // Log the error
+    throw error; // Rethrow the error to be handled by the calling function
+  }
 };
 
 module.exports = { classifyImage };

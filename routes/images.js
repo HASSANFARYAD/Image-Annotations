@@ -1,10 +1,11 @@
 // routes/images.js
 const express = require("express");
 const multer = require("multer");
+const path = require("path"); // Import path module
 const Image = require("../models/Image");
 const Annotation = require("../models/Annotation");
 const authenticateToken = require("../config/authMiddleware");
-//const { classifyImage } = require("../utils/imageClassifier"); // Import the classifier
+const { classifyImage } = require("../utils/imageClassifier"); // Import the classifier
 const router = express.Router();
 
 // Set up storage for multer with file extension handling
@@ -27,17 +28,27 @@ router.post(
   authenticateToken,
   upload.single("image"),
   async (req, res) => {
-    const image = new Image({ userId: req.user.id, filePath: req.file.path });
     try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      const ext = path.extname(req.file.originalname); // Get the original file extension
+      const classificationResult = await classifyImage(req.file.path); // Classify the image
+      console.log(
+        "classificationResult outside: ",
+        classificationResult.cat.toString()
+      );
+      const image = new Image({
+        userId: req.user.id,
+        filePath: req.file.path,
+        classificationResult: classificationResult.cat.toString(),
+      });
+      console.log("image0", image.classificationResult);
       await image.save();
 
-      // Classify the image
-      //const className = await classifyImage(req.file.path);
-
-      //res.status(201).json({ image, className }); // Return classification result
       res.status(201).json(image);
     } catch (error) {
-      res.status(400).json({ message: "Error uploading image" });
+      res.status(400).json({ message: "Error uploading or classifying image" });
     }
   }
 );
